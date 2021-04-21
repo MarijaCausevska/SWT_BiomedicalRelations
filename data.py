@@ -5,6 +5,7 @@ from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 import torch
 from keras.preprocessing import sequence
+import wget
 from model import *
 from utils import *
 
@@ -25,10 +26,12 @@ class Prepare_Data(Conf):
         # if not exist original data, download them
         if not os.path.exists('./data/part-i-%s-path-theme-distributions.txt'%self.task_type):
             print('You can download data manually from https://zenodo.org/record/1035500#.Xe3uR5MzZTZ')
-            os.system('wget -P ./data %s'%self.download_url[self.task_type][0])
+            #os.system('wget -P ./data %s'%self.download_url[self.task_type][0])
+            wget.download(self.download_url[self.task_type][0],out = './data/part-i-%s-path-theme-distributions.txt'%self.task_type)
         if not os.path.exists('./data/part-ii-dependency-paths-%s-sorted-with-themes.txt'%self.task_type):
             print('You can download data manually from https://zenodo.org/record/1035500#.Xe3uR5MzZTZ')
-            os.system('wget -P ./data %s'%self.download_url[self.task_type][1])
+            #os.system('wget -P ./data %s'%self.download_url[self.task_type][1])
+            wget.download(self.download_url[self.task_type][1],out = './data/part-ii-dependency-paths-%s-sorted-with-themes.txt'%self.task_type)
 
         # build data loder
         path_theme_df = pd.read_csv('./data/part-i-%s-path-theme-distributions.txt'%self.task_type,sep='\t',
