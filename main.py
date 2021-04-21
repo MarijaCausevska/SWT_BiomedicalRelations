@@ -123,7 +123,7 @@ def Predict():
             else:
                 # reverse_pred is a correct relation but init_pred not
                 return 'reverse_pred'
-    marked_sentence_df = pd.read_csv('./data/%s/marked_sentence.csv'%args.prediction_path)
+    marked_sentence_df = pd.read_csv('./data/marked_sentence.csv')
     label_df = pd.read_csv('./data/%s_label.csv'%args.task_type)
     tokenizer,model = Bert_model(args.task_type,'./model/%s'%args.task_type)
     model = model.to(device)
