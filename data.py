@@ -68,7 +68,7 @@ class Prepare_Data(Conf):
         return train_data_loader,test_data_loader
 
     def Prepare_predict_data(self,tokenizer,bs):
-        marked_sentence_df = pd.read_csv('./data/%s/marked_sentence.csv'%self.prediction_path)
+        marked_sentence_df = pd.read_csv('./data/marked_sentence.csv')
         marked_sentences = marked_sentence_df.loc[(marked_sentence_df['start_entity_type'].apply(lambda x:x.lower())==self.task_type.split('-')[0])&\
                                                   (marked_sentence_df['end_entity_type'].apply(lambda x:x.lower())==self.task_type.split('-')[1]),'marked_sentence']
 
