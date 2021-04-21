@@ -8,12 +8,12 @@ warnings.filterwarnings('ignore')
 class Conf:
     # some information can be found in:
     # Percha B, Altman R B. A global network of biomedical relationships derived from text[J]. Bioinformatics, 2018, 34(15): 2614-2624.
-    download_url = {'chemical-disease':['https://zenodo.org/record/1035500/files/part-i-chemical-disease-path-theme-distributions.txt?download=1',
-                                             'https://zenodo.org/record/1035500/files/part-ii-dependency-paths-chemical-disease-sorted-with-themes.txt?download=1'],
-                    'chemical-gene':['https://zenodo.org/record/1035500/files/part-i-chemical-gene-path-theme-distributions.txt?download=1',
-                                                               'https://zenodo.org/record/1035500/files/part-ii-dependency-paths-chemical-gene-sorted-with-themes.txt?download=1'],
-                    'gene-disease':['https://zenodo.org/record/1035500/files/part-i-gene-disease-path-theme-distributions.txt?download=1',
-                                             'https://zenodo.org/record/1035500/files/part-ii-dependency-paths-gene-disease-sorted-with-themes.txt?download=1'],
+    download_url = {'chemical-disease':['https://zenodo.org/record/1035500/files/part-i-chemical-disease-path-theme-distributions.txt',
+                                             'https://zenodo.org/record/1035500/files/part-ii-dependency-paths-chemical-disease-sorted-with-themes.txt'],
+                    'chemical-gene':['https://zenodo.org/record/1035500/files/part-i-chemical-gene-path-theme-distributions.txt',
+                                                               'https://zenodo.org/record/1035500/files/part-ii-dependency-paths-chemical-gene-sorted-with-themes.txt'],
+                    'gene-disease':['https://zenodo.org/record/1035500/files/part-i-gene-disease-path-theme-distributions.txt',
+                                             'https://zenodo.org/record/1035500/files/part-ii-dependency-paths-gene-disease-sorted-with-themes.txt'],
                     }
     usecols = {'chemical-disease':['path', 'T', 'C', 'Sa', 'Pr', 'Pa', 'J', 'Mp'],
                'chemical-gene':['path', 'A+', 'A-', 'B', 'E+', 'E-', 'E', 'N', 'O', 'K', 'Z'],
