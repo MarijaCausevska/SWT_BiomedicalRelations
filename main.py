@@ -48,12 +48,12 @@ def Load_train_test_data():
     train_data_loader,test_data_loader = prepare.Prepare_train_test_data(tokenizer,args.train_bs,args.eval_bs)
     return train_data_loader,test_data_loader
 
-def Load_predict_data():
-    marked_sentences,predict_data_loader = prepare.Prepare_predict_data(tokenizer,args.eval_bs)
-    return marked_sentences,predict_data_loader
+#def Load_predict_data():
+#    marked_sentences,predict_data_loader = prepare.Prepare_predict_data(tokenizer,args.eval_bs)
+#    return marked_sentences,predict_data_loader
 
 train_data_loader,test_data_loader = Load_train_test_data()
-marked_sentences,predict_data_loader = Load_predict_data()
+#marked_sentences,predict_data_loader = Load_predict_data()
 device = torch.device('cuda:%s'%args.cuda if torch.cuda.is_available() else 'cpu')
 print('device:', device)
 
