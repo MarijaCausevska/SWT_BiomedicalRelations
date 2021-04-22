@@ -10,7 +10,7 @@ warnings.filterwarnings('ignore')
 
 def Bert_model(taskType,bertPath):
     label_df = pd.read_csv('./data/%s_label.csv'%taskType)
-    tokenizer = BertTokenizer.from_pretrained(bertPath,do_lower_case=False)
-    model = BertForSequenceClassification.from_pretrained(bertPath, num_labels=label_df['label'].nunique())
+    tokenizer = BertTokenizer.from_pretrained('bert-base-cased',do_lower_case=False)
+    model = BertForSequenceClassification.from_pretrained('bert-base-cased', num_labels=label_df['label'].nunique())
     Bert_conf(tokenizer,model)
     return tokenizer,model
