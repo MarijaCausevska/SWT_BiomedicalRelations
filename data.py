@@ -70,18 +70,18 @@ class Prepare_Data(Conf):
         test_data_loader = Data_loader(torch.LongTensor(X_test),torch.LongTensor(y_test),bs=evalBS)
         return train_data_loader,test_data_loader
 
-    def Prepare_predict_data(self,tokenizer,bs):
-        marked_sentence_df = pd.read_csv('./data/marked_sentence.csv',header=None,error_bad_lines=False)
-        marked_sentences = marked_sentence_df.loc[(marked_sentence_df['start_entity_type'].apply(lambda x:x.lower())==self.task_type.split('-')[0])&\
-                                                  (marked_sentence_df['end_entity_type'].apply(lambda x:x.lower())==self.task_type.split('-')[1]),'marked_sentence']
+   # def Prepare_predict_data(self,tokenizer,bs):
+   #     marked_sentence_df = pd.read_csv('./data/marked_sentence.csv',header=None,error_bad_lines=False)
+    #    marked_sentences = marked_sentence_df.loc[(marked_sentence_df['start_entity_type'].apply(lambda x:x.lower())==self.task_type.split('-')[0])&\
+    #                                              (marked_sentence_df['end_entity_type'].apply(lambda x:x.lower())==self.task_type.split('-')[1]),'marked_sentence']
 
-        ids = marked_sentences.apply(lambda x:tokenizer.convert_tokens_to_ids(tokenizer.tokenize(x))).tolist()
-        ids = sequence.pad_sequences(ids,self.max_seq_len, truncating='post', padding='post')
+     #   ids = marked_sentences.apply(lambda x:tokenizer.convert_tokens_to_ids(tokenizer.tokenize(x))).tolist()
+     #   ids = sequence.pad_sequences(ids,self.max_seq_len, truncating='post', padding='post')
         # we cannot confirm order of entities, so predict two possibilities
-        reverse_marked_sentences = marked_sentence_df.loc[(marked_sentence_df['start_entity_type'].apply(lambda x:x.lower())==self.task_type.split('-')[0])&\
-                                                  (marked_sentence_df['end_entity_type'].apply(lambda x:x.lower())==self.task_type.split('-')[1]),'marked_sentence']\
-                                                  .apply(lambda x:x.replace('start_entity','init_start_entity').replace('end_entity','start_entity').replace('init_start_entity','end_entity'))
-        reverse_ids = reverse_marked_sentences.apply(lambda x:tokenizer.convert_tokens_to_ids(tokenizer.tokenize(x))).tolist()
-        reverse_ids = sequence.pad_sequences(reverse_ids,self.max_seq_len, truncating='post', padding='post')
-        predict_data_loader = Data_loader(torch.LongTensor(ids),torch.LongTensor(reverse_ids),bs=bs)
-        return marked_sentences.values,predict_data_loader
+     #   reverse_marked_sentences = marked_sentence_df.loc[(marked_sentence_df['start_entity_type'].apply(lambda x:x.lower())==self.task_type.split('-')[0])&\
+     #                                             (marked_sentence_df['end_entity_type'].apply(lambda x:x.lower())==self.task_type.split('-')[1]),'marked_sentence']\
+      #                                            .apply(lambda x:x.replace('start_entity','init_start_entity').replace('end_entity','start_entity').replace('init_start_entity','end_entity'))
+      #  reverse_ids = reverse_marked_sentences.apply(lambda x:tokenizer.convert_tokens_to_ids(tokenizer.tokenize(x))).tolist()
+      #  reverse_ids = sequence.pad_sequences(reverse_ids,self.max_seq_len, truncating='post', padding='post')
+      #  predict_data_loader = Data_loader(torch.LongTensor(ids),torch.LongTensor(reverse_ids),bs=bs)
+      #  return marked_sentences.values,predict_data_loader
