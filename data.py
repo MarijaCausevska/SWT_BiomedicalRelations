@@ -14,13 +14,13 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 warnings.filterwarnings('ignore')
 
 class Prepare_Data(Conf):
-    def __init__(self,taskType,confidenceLimit,predictionPath,maxSeqLen,bertPath):
+    def __init__(self,taskType,confidenceLimit,predictionPath,maxSeqLen):#,bertPath):
         super(Prepare_Data,self).__init__()
         self.task_type = taskType
         self.confidence_limit = confidenceLimit
         self.prediction_path = predictionPath
         self.max_seq_len = maxSeqLen
-        self.bert_path = bertPath
+        #self.bert_path = bertPath
 
     def Prepare_train_test_data(self,tokenizer,trainBS,evalBS):
         # if not exist original data, download them
