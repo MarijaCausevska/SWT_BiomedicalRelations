@@ -27,8 +27,8 @@ def Parse_args():
                       default='COVID-19', help='prediction data path')
     args.add_argument('--max_seq_len', type=int,
                       default=64, help='padding length of sequence')
-    args.add_argument('--bert_path',
-                      default='./pretrained/bert-base-cased/bert-base-cased-vocab.txt', help='bert model path')
+    #args.add_argument('--bert_path',
+    #                  default='./pretrained/bert-base-cased/bert-base-cased-vocab.txt', help='bert model path')
     args.add_argument('--lr', type=float, default=1e-5)
     args.add_argument('--train_bs', type=int, default=128, help='train batch size')
     args.add_argument('--eval_bs', type=int, default=128, help='evaluate batch size')
@@ -42,7 +42,7 @@ args = Parse_args()
 confidence_limit = args.confidence_limit if args.confidence_limit != -1.0 else conf.confidence_limit[args.task_type]
 tokenizer = BertTokenizer.from_pretrained(args.bert_path,do_lower_case=False)
 Bert_conf(tokenizer)
-prepare = Prepare_Data(args.task_type,confidence_limit,args.prediction_path,args.max_seq_len,args.bert_path)
+prepare = Prepare_Data(args.task_type,confidence_limit,args.prediction_path,args.max_seq_len)#,args.bert_path)
 
 def Load_train_test_data():
     train_data_loader,test_data_loader = prepare.Prepare_train_test_data(tokenizer,args.train_bs,args.eval_bs)
