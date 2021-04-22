@@ -40,7 +40,7 @@ def Parse_args():
 args = Parse_args()
 # dependency path lower confidence limit, use suggestion value if it equal -1.0
 confidence_limit = args.confidence_limit if args.confidence_limit != -1.0 else conf.confidence_limit[args.task_type]
-tokenizer = BertTokenizer.from_pretrained(args.bert_path,do_lower_case=False)
+tokenizer = BertTokenizer.from_pretrained('bert-base-cased',do_lower_case=False) #(args.bert_path,do_lower_case=False)
 Bert_conf(tokenizer)
 prepare = Prepare_Data(args.task_type,confidence_limit,args.prediction_path,args.max_seq_len)#,args.bert_path)
 
@@ -58,7 +58,7 @@ device = torch.device('cuda:%s'%args.cuda if torch.cuda.is_available() else 'cpu
 print('device:', device)
 
 def Train(evalEpochs=None):
-    tokenizer,model = Bert_model(args.task_type,args.bert_path)
+    tokenizer,model = Bert_model(args.task_type,'bert-base-cased')#Bert_model(args.task_type,args.bert_path)
     tokenizer.save_pretrained('./model/%s'%args.task_type)
     model = model.to(device)
     model_params = [p for p in model.parameters() if p.requires_grad]
