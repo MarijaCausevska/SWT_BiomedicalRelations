@@ -75,7 +75,9 @@ def Train(evalEpochs=None):
             loss.backward()
             optimizer.step()
             running_loss += loss.item()
+            acc = 1 - running_loss  #dodadeno
         print(f'[epoch {epoch+1}] loss: {running_loss:3f}')
+        print(f'[epoch {epoch+1}] accuracy: {acc:3f}')
         if evalEpochs != None:
             if (epoch+1)%evalEpochs == 0:
                 torch.cuda.empty_cache()
