@@ -89,7 +89,7 @@ def Train(evalEpochs=None):
 
 def Evaluate(model=None):
     if model == None:
-        tokenizer,model = Bert_model(args.task_type,'./model/%s'%args.task_type)
+        tokenizer,model = Bert_model(args.task_type,'./model/%s/'%args.task_type)
         model = model.to(device)
     test_preds,test_labels = [],[]
     for data in tqdm(test_data_loader):
