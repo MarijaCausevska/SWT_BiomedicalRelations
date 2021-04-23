@@ -32,7 +32,7 @@ def Parse_args():
     args.add_argument('--lr', type=float, default=1e-5)
     args.add_argument('--train_bs', type=int, default=128, help='train batch size')
     args.add_argument('--eval_bs', type=int, default=128, help='evaluate batch size')
-    args.add_argument('--epochs', type=int, default=100)
+    args.add_argument('--epochs', type=int, default=2)
     args.add_argument('--cuda', type=int, default=0, help='which gpu be used')
     args = args.parse_args()
     return args
@@ -167,6 +167,6 @@ def Evaluate(model=None):
   # torch.cuda.empty_cache()
   #  return
 
-Train(evalEpochs=5)
+Train(evalEpochs=1)
 Evaluate()
 #Predict()
