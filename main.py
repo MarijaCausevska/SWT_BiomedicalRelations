@@ -59,7 +59,7 @@ print('device:', device)
 
 def Train(evalEpochs=None):
     tokenizer,model = Bert_model(args.task_type,'bert-base-cased')#Bert_model(args.task_type,args.bert_path)
-    tokenizer.save_pretrained('./model/%s'%args.task_type)
+    tokenizer.save_pretrained('./model/%s/'%args.task_type)
     model = model.to(device)
     model_params = [p for p in model.parameters() if p.requires_grad]
     optimizer = torch.optim.Adam(model_params, lr=args.lr)
