@@ -106,7 +106,7 @@ def Evaluate(model=None):
     accuracy = accuracy_score(test_labels,test_preds)
     print('test macro f1 score:%.4f'%macro_f1)
     print('test weighted f1 score:%.4f'%weighted_f1)
-    print ('accuracy:' accuracy)
+    print (accuracy)
     torch.cuda.empty_cache()
     return
 
