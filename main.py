@@ -2,6 +2,8 @@ import pandas as pd
 import numpy as np
 from tqdm import tqdm
 from sklearn.metrics import f1_score
+#from sklearn.metrics import f1_weighted
+from sklearn.metrics import accuracy_score
 import torch
 import torch.nn.functional as F
 from transformers import BertTokenizer
@@ -100,7 +102,11 @@ def Evaluate(model=None):
         test_preds.extend(list(pred.cpu().detach().numpy()))
         test_labels.extend(list(labels.cpu().detach().numpy()))
     macro_f1 = f1_score(test_labels,test_preds,average='macro')
+    weighted_f1 = f1_score(test_labels,test_preds,average='weighted')
+    accuracy = accuracy_score(test_labels,test_preds)
     print('test macro f1 score:%.4f'%macro_f1)
+    print('test weighted f1 score:%.4f'%weighted_f1)
+    print ('accuracy:' accuracy)
     torch.cuda.empty_cache()
     return
 
@@ -169,6 +175,6 @@ def Evaluate(model=None):
   # torch.cuda.empty_cache()
   #  return
 
-Train(evalEpochs=1)
+Train()#evalEpochs=1)
 Evaluate()
 #Predict()
