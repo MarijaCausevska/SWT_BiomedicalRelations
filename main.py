@@ -32,7 +32,7 @@ def Parse_args():
     args.add_argument('--lr', type=float, default=1e-5)
     args.add_argument('--train_bs', type=int, default=128, help='train batch size')
     args.add_argument('--eval_bs', type=int, default=128, help='evaluate batch size')
-    args.add_argument('--epochs', type=int, default=2)
+    args.add_argument('--epochs', type=int, default=10)
     args.add_argument('--cuda', type=int, default=0, help='which gpu be used')
     args = args.parse_args()
     return args
@@ -59,7 +59,7 @@ print('device:', device)
 
 def Train(evalEpochs=None):
     tokenizer,model = Bert_model(args.task_type,'bert-base-cased')#Bert_model(args.task_type,args.bert_path)
-    tokenizer.save_pretrained('./model/%s/'%args.task_type)
+    tokenizer.save_pretrained('./models/%s/'%args.task_type)
     model = model.to(device)
     model_params = [p for p in model.parameters() if p.requires_grad]
     optimizer = torch.optim.Adam(model_params, lr=args.lr)
@@ -83,13 +83,13 @@ def Train(evalEpochs=None):
                 torch.cuda.empty_cache()
                 Evaluate(model)
     model_to_save = model.module if hasattr(model, 'module') else model  # Take care of distributed/parallel training
-    model_to_save.save_pretrained('./model/%s/'%args.task_type)
+    model_to_save.save_pretrained('./models/%s/'%args.task_type)
     torch.cuda.empty_cache()
     return
 
 def Evaluate(model=None):
     if model == None:
-        tokenizer,model = Bert_model(args.task_type,'./model/%s/'%args.task_type)
+        tokenizer,model = Bert_model(args.task_type,'./models/%s/'%args.task_type)
         model = model.to(device)
     test_preds,test_labels = [],[]
     for data in tqdm(test_data_loader):
