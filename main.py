@@ -87,7 +87,8 @@ def Train(evalEpochs=None):
                 torch.cuda.empty_cache()
                 Evaluate(model)
     model_to_save = model.module if hasattr(model, 'module') else model  # Take care of distributed/parallel training
-    model_to_save.save_pretrained('./models/%s/'%args.task_type)
+    #model_to_save.save_pretrained('./models/%s/'%args.task_type)
+    torch.save(model_to_save.state_dict(), ./models/%s/'%args.task_type)
     torch.cuda.empty_cache()
     return
 
