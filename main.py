@@ -33,8 +33,8 @@ def Parse_args():
     #                  default='./pretrained/bert-base-cased/bert-base-cased-vocab.txt', help='bert model path')
     args.add_argument('--lr', type=float, default=1e-5)
     args.add_argument('--train_bs', type=int, default=128, help='train batch size')
-    args.add_argument('--eval_bs', type=int, default=128, help='evaluate batch size')
-    args.add_argument('--epochs', type=int, default=10)
+    args.add_argument('--eval_bs', type=int, default=64, help='evaluate batch size')
+    args.add_argument('--epochs', type=int, default=20)
     args.add_argument('--cuda', type=int, default=0, help='which gpu be used')
     args = args.parse_args()
     return args
