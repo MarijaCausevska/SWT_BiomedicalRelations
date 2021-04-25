@@ -69,6 +69,8 @@ def Train(evalEpochs=None):
         running_loss = 0.0
         for data in tqdm(train_data_loader):
             ids, labels = [t.to(device) for t in data]
+            print(ids.shape())
+            print(labels.shape())
             optimizer.zero_grad()
             # forward pass
             outputs = model(input_ids=ids,labels=labels)
