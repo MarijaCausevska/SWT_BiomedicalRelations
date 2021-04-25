@@ -61,7 +61,7 @@ print('device:', device)
 
 def Train(evalEpochs=None):
     tokenizer,model = Bert_model(args.task_type,'bert-base-cased')#Bert_model(args.task_type,args.bert_path)
-    tokenizer.save_pretrained('./models/%s/'%args.task_type)
+    tokenizer.save_pretrained('./models/')#%s/'%args.task_type)
     model = model.to(device)
     model_params = [p for p in model.parameters() if p.requires_grad]
     optimizer = torch.optim.Adam(model_params, lr=args.lr)
@@ -87,14 +87,14 @@ def Train(evalEpochs=None):
                 torch.cuda.empty_cache()
                 Evaluate(model)
     model_to_save = model.module if hasattr(model, 'module') else model  # Take care of distributed/parallel training
-    #model_to_save.save_pretrained('./models/%s/'%args.task_type)
-    torch.save(model_to_save.state_dict(),'./models/%s/'%args.task_type)
+    model_to_save.save_pretrained('./models/')#%s/'%args.task_type)
+    #torch.save(model_to_save.state_dict(),'./models/%s/'%args.task_type)
     torch.cuda.empty_cache()
     return
 
 def Evaluate(model=None):
     if model == None:
-        tokenizer,model = Bert_model(args.task_type,'./models/%s/'%args.task_type)
+        tokenizer,model = Bert_model(args.task_type,'./models/')#/%s/'%args.task_type)
         model = model.to(device)
     test_preds,test_labels = [],[]
     for data in tqdm(test_data_loader):
