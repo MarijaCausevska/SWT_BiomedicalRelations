@@ -14,6 +14,8 @@ class Conf:
                                                                'https://zenodo.org/record/1035500/files/part-ii-dependency-paths-chemical-gene-sorted-with-themes.txt'],
                     'gene-disease':['https://zenodo.org/record/1035500/files/part-i-gene-disease-path-theme-distributions.txt',
                                              'https://zenodo.org/record/1035500/files/part-ii-dependency-paths-gene-disease-sorted-with-themes.txt'],
+                    'gene-gene':['https://zenodo.org/record/1035500/files/part-i-gene-gene-path-theme-distributions.txt',
+                                             'https://zenodo.org/record/1035500/files/part-ii-dependency-paths-gene-gene-sorted-with-themes.txt'],
                     }
     usecols = {'chemical-disease':['path', 'T', 'C', 'Sa', 'Pr', 'Pa', 'J', 'Mp'],
                'chemical-gene':['path', 'A+', 'A-', 'B', 'E+', 'E-', 'E', 'N', 'O', 'K', 'Z'],
