@@ -8,8 +8,12 @@ from sklearn.metrics import accuracy_score
 #from sklearn.metrics import recall_score
 import torch
 import torch.nn.functional as F
+import torch.nn as nn
 from transformers import BertTokenizer
 import argparse
+#dodadeni
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+import seaborn as sns
 from data import *
 from model import *
 from utils import *
@@ -67,6 +71,7 @@ def Train(evalEpochs=None):
     model = model.to(device)
     model_params = [p for p in model.parameters() if p.requires_grad]
     optimizer = torch.optim.Adam(model_params, lr=args.lr)
+    cross_entropy_loss = nn.CrossEntropyLoss()
     for epoch in range(args.epochs):
         running_loss = 0.0
         for data in tqdm(train_data_loader):
@@ -77,13 +82,17 @@ def Train(evalEpochs=None):
             # forward pass
             outputs = model(input_ids=ids,labels=labels)
             loss = outputs[0]
+            print(loss)
+            output = cross_entropy_loss(ids, labels)
             # backward
             loss.backward()
+            output.backward()
             optimizer.step()
             running_loss += loss.item()
-            acc = 1 - running_loss  #dodadeno
+            #acc = 1 - running_loss  #dodadeno
         print(f'[epoch {epoch+1}] loss: {running_loss:3f}')
-        print(f'[epoch {epoch+1}] accuracy: {acc:3f}')
+        print(f'[epoch {epoch+1}] loss: {output:3f}')
+        #print(f'[epoch {epoch+1}] accuracy: {acc:3f}')
         if evalEpochs != None:
             if (epoch+1)%evalEpochs == 0:
                 torch.cuda.empty_cache()
