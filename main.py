@@ -71,27 +71,32 @@ def Train(evalEpochs=None):
     model = model.to(device)
     model_params = [p for p in model.parameters() if p.requires_grad]
     optimizer = torch.optim.Adam(model_params, lr=args.lr)
-    cross_entropy_loss = nn.CrossEntropyLoss()
+    #cross_entropy_loss = nn.CrossEntropyLoss()
     for epoch in range(args.epochs):
         running_loss = 0.0
         for data in tqdm(train_data_loader):
             ids, labels = [t.to(device) for t in data]
             #print(ids.shape())
             #print(labels.shape())
+            
+            outputs = model(input_ids)
+            loss = F.cross_entropy(outputs.logits, labels)
+            loss.backward()
+            optimizer.step()
             optimizer.zero_grad()
             # forward pass
-            outputs = model(input_ids=ids,labels=labels)
-            loss = outputs[0]
-            print(loss)
-            output = cross_entropy_loss(ids, labels)
+            #outputs = model(input_ids=ids,labels=labels) <- original
+            #loss = outputs[0] <- original
+            #print(loss)
+            #output = cross_entropy_loss(ids, labels)
             # backward
-            loss.backward()
-            output.backward()
-            optimizer.step()
+            #loss.backward()
+            #output.backward()
+            #optimizer.step()
             running_loss += loss.item()
             #acc = 1 - running_loss  #dodadeno
         print(f'[epoch {epoch+1}] loss: {running_loss:3f}')
-        print(f'[epoch {epoch+1}] cross entropy loss: {output:3f}')
+        print(f'[epoch {epoch+1}] cross entropy loss: {loss:3f}')
         #print(f'[epoch {epoch+1}] accuracy: {acc:3f}')
         if evalEpochs != None:
             if (epoch+1)%evalEpochs == 0:
