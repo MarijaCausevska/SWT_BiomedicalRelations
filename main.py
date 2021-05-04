@@ -65,6 +65,12 @@ train_data_loader,test_data_loader = Load_train_test_data()
 device = torch.device('cuda:%s'%args.cuda if torch.cuda.is_available() else 'cpu')
 print('device:', device)
 
+# Function to calculate the accuracy of our predictions vs labels
+def flat_accuracy(preds, labels):
+    pred_flat = np.argmax(preds, axis=1).flatten()
+    labels_flat = labels.flatten()
+    return np.sum(pred_flat == labels_flat) / len(labels_flat)
+
 def Train(evalEpochs=None):
     tokenizer,model = Bert_model(args.task_type,'bert-base-cased')#Bert_model(args.task_type,args.bert_path)
     tokenizer.save_pretrained('./models/')#%s/'%args.task_type)
@@ -105,21 +111,47 @@ def Evaluate(model=None):
         tokenizer,model = Bert_model(args.task_type,'./models/')#/%s/'%args.task_type)
         model = model.to(device)
     test_preds,test_labels = [],[]
+    total_eval_accuracy = 0
+    total_eval_loss = 0
     for data in tqdm(test_data_loader):
         ids, labels = [t.to(device) for t in data]
-        outputs = model(input_ids=ids)
-        logits = outputs[0]
-        _, pred = torch.max(logits.data, 1)
-        test_preds.extend(list(pred.cpu().detach().numpy()))
-        test_labels.extend(list(labels.cpu().detach().numpy()))
-    macro_f1 = f1_score(test_labels,test_preds,average='macro')
-    weighted_f1 = f1_score(test_labels,test_preds,average='weighted')
-    accuracy = accuracy_score(test_labels,test_preds)
+        loss, logits = model(ids, labels=labels)
+        # Accumulate the validation loss.
+        total_eval_loss += loss.item()
+
+        # Move logits and labels to CPU
+        logits = logits.detach().cpu().numpy()
+        label_ids = labels.to('cpu').numpy()
+
+        # Calculate the accuracy for this batch of test sentences, and
+        # accumulate it over all batches.
+        total_eval_accuracy += flat_accuracy(logits, label_ids)
+        
+
+    # Report the final accuracy for this validation run.
+    avg_val_accuracy = total_eval_accuracy / len(test_data_loader)
+    print("  Accuracy: {0:.2f}".format(avg_val_accuracy))
+
+    # Calculate the average loss over all of the batches.
+    avg_val_loss = total_eval_loss / len(tes_data_loader)
+    
+    # Measure how long the validation run took.
+    validation_time = format_time(time.time() - t0)
+    
+    print("  Validation Loss: {0:.2f}".format(avg_val_loss))
+        #outputs = model(input_ids=ids)
+        #logits = outputs[0]
+        #_, pred = torch.max(logits.data, 1)
+        #test_preds.extend(list(pred.cpu().detach().numpy()))
+        #test_labels.extend(list(labels.cpu().detach().numpy()))
+    #macro_f1 = f1_score(test_labels,test_preds,average='macro')
+    #weighted_f1 = f1_score(test_labels,test_preds,average='weighted')
+    #accuracy = accuracy_score(test_labels,test_preds)
     #precision = precision_score(test_labels,test_preds)
     #recall = recall_score(test_labels,test_preds)
-    print('test macro f1 score:%.4f'%macro_f1)
-    print('test weighted f1 score:%.4f'%weighted_f1)
-    print (accuracy)
+    #print('test macro f1 score:%.4f'%macro_f1)
+    #print('test weighted f1 score:%.4f'%weighted_f1)
+    #print (accuracy)
     #print (precision)
     #print (recall)
     torch.cuda.empty_cache()
