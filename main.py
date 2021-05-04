@@ -78,9 +78,8 @@ def Train(evalEpochs=None):
             ids, labels = [t.to(device) for t in data]
             #print(ids.shape())
             #print(labels.shape())
-            
-            outputs = model(ids)
-            loss = F.cross_entropy(outputs.logits, labels)
+            outputs = model(input_ids=ids, labels=labels)
+            loss = outputs.loss
             loss.backward()
             optimizer.step()
             optimizer.zero_grad()
@@ -93,10 +92,10 @@ def Train(evalEpochs=None):
             #loss.backward()
             #output.backward()
             #optimizer.step()
-            #running_loss += loss.item() <- original
+            running_loss += loss.item() 
             #acc = 1 - running_loss  #dodadeno
         #print(f'[epoch {epoch+1}] loss: {running_loss:3f}')
-        print(f'[epoch {epoch+1}] cross entropy loss: {loss:3f}')
+        print(f'[epoch {epoch+1}] running_loss: {running_loss:3f}')
         #print(f'[epoch {epoch+1}] accuracy: {acc:3f}')
         if evalEpochs != None:
             if (epoch+1)%evalEpochs == 0:
