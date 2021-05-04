@@ -92,7 +92,7 @@ def Train(evalEpochs=None):
             running_loss += loss.item()
         print(f'[epoch {epoch+1}] loss: {running_loss:3f}')
         avg_train_loss = running_loss / len(train_data_loader)
-        print(f'[epoch {epoch+1}] loss: {running_loss:3f}')
+        print(f'[epoch {epoch+1}] avg_loss: {avg_train_loss:3f}')
         
         #print(f'[epoch {epoch+1}] running_loss: {running_loss:3f}')
         #print(f'[epoch {epoch+1}] accuracy: {acc:3f}')
