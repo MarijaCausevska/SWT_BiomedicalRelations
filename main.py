@@ -76,26 +76,19 @@ def Train(evalEpochs=None):
         running_loss = 0.0
         for data in tqdm(train_data_loader):
             ids, labels = [t.to(device) for t in data]
-            #print(ids.shape())
-            #print(labels.shape())
-            outputs = model(input_ids=ids, labels=labels)
-            loss = outputs.loss
-            loss.backward()
-            optimizer.step()
             optimizer.zero_grad()
             # forward pass
-            #outputs = model(input_ids=ids,labels=labels) <- original
-            #loss = outputs[0] <- original
-            #print(loss)
-            #output = cross_entropy_loss(ids, labels)
+            outputs = model(input_ids=ids,labels=labels)
+            loss = outputs[0]
             # backward
-            #loss.backward()
-            #output.backward()
-            #optimizer.step()
-            running_loss += loss.item() 
-            #acc = 1 - running_loss  #dodadeno
-        #print(f'[epoch {epoch+1}] loss: {running_loss:3f}')
-        print(f'[epoch {epoch+1}] running_loss: {running_loss:3f}')
+            loss.backward()
+            optimizer.step()
+            running_loss += loss.item()
+        print(f'[epoch {epoch+1}] loss: {running_loss:3f}')
+        avg_train_loss = running_loss / len(train_data_loader)
+        print(f'[epoch {epoch+1}] loss: {running_loss:3f}')
+        
+        #print(f'[epoch {epoch+1}] running_loss: {running_loss:3f}')
         #print(f'[epoch {epoch+1}] accuracy: {acc:3f}')
         if evalEpochs != None:
             if (epoch+1)%evalEpochs == 0:
