@@ -133,10 +133,9 @@ def Evaluate(model=None):
     print("  Accuracy: {0:.2f}".format(avg_val_accuracy))
 
     # Calculate the average loss over all of the batches.
-    avg_val_loss = total_eval_loss / len(tes_data_loader)
+    avg_val_loss = total_eval_loss / len(test_data_loader)
     
-    # Measure how long the validation run took.
-    validation_time = format_time(time.time() - t0)
+   
     
     print("  Validation Loss: {0:.2f}".format(avg_val_loss))
         #outputs = model(input_ids=ids)
