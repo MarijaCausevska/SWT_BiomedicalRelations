@@ -108,51 +108,25 @@ def Train(evalEpochs=None):
 
 def Evaluate(model=None):
     if model == None:
-        tokenizer,model = Bert_model(args.task_type,'./models/')#/%s/'%args.task_type)
+        tokenizer,model = Bert_model(args.task_type,'./model/%s'%args.task_type)
         model = model.to(device)
     test_preds,test_labels = [],[]
     total_eval_accuracy = 0
-    total_eval_loss = 0
     for data in tqdm(test_data_loader):
         ids, labels = [t.to(device) for t in data]
-        loss, logits = model(ids, labels=labels)
-        # Accumulate the validation loss.
-        total_eval_loss += loss.item()
-
-        # Move logits and labels to CPU
-        logits = logits.detach().cpu().numpy()
-        label_ids = labels.to('cpu').numpy()
-
-        # Calculate the accuracy for this batch of test sentences, and
-        # accumulate it over all batches.
-        total_eval_accuracy += flat_accuracy(logits, label_ids)
-        
-
+        outputs = model(input_ids=ids)
+        logits = outputs[0]
+        _, pred = torch.max(logits.data, 1)
+        test_preds.extend(list(pred.cpu().detach().numpy()))
+        test_labels.extend(list(labels.cpu().detach().numpy()))
+        total_eval_accuracy += flat_accuracy(test_preds,test_labels)
+        #accuracy = accuracy_score(test_labels,test_preds)
+    macro_f1 = f1_score(test_labels,test_preds,average='macro')
+    print('test macro f1 score:%.4f'%macro_f1)
     # Report the final accuracy for this validation run.
     avg_val_accuracy = total_eval_accuracy / len(test_data_loader)
     print("  Accuracy: {0:.2f}".format(avg_val_accuracy))
 
-    # Calculate the average loss over all of the batches.
-    avg_val_loss = total_eval_loss / len(test_data_loader)
-    
-   
-    
-    print("  Validation Loss: {0:.2f}".format(avg_val_loss))
-        #outputs = model(input_ids=ids)
-        #logits = outputs[0]
-        #_, pred = torch.max(logits.data, 1)
-        #test_preds.extend(list(pred.cpu().detach().numpy()))
-        #test_labels.extend(list(labels.cpu().detach().numpy()))
-    #macro_f1 = f1_score(test_labels,test_preds,average='macro')
-    #weighted_f1 = f1_score(test_labels,test_preds,average='weighted')
-    #accuracy = accuracy_score(test_labels,test_preds)
-    #precision = precision_score(test_labels,test_preds)
-    #recall = recall_score(test_labels,test_preds)
-    #print('test macro f1 score:%.4f'%macro_f1)
-    #print('test weighted f1 score:%.4f'%weighted_f1)
-    #print (accuracy)
-    #print (precision)
-    #print (recall)
     torch.cuda.empty_cache()
     return
 
