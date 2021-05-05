@@ -112,6 +112,8 @@ def Evaluate(model=None):
         model = model.to(device)
     test_preds,test_labels = [],[]
     total_eval_accuracy = 0
+    val_accuracy = []
+    val_loss = []
     for data in tqdm(test_data_loader):
         ids, labels = [t.to(device) for t in data]
         outputs = model(input_ids=ids)
@@ -120,13 +122,18 @@ def Evaluate(model=None):
         test_preds.extend(list(pred.cpu().detach().numpy()))
         test_labels.extend(list(labels.cpu().detach().numpy()))
         total_eval_accuracy += flat_accuracy(test_preds,test_labels)
+        #Calculate accuracy rate
+        accuracy = (test_pred == labels).cpu().numpy().mean() * 100
+        val_accuracy.append(accuracy)
         #accuracy = accuracy_score(test_labels,test_preds)
+        
     macro_f1 = f1_score(test_labels,test_preds,average='macro')
     print('test macro f1 score:%.4f'%macro_f1)
     # Report the final accuracy for this validation run.
     avg_val_accuracy = total_eval_accuracy / len(test_data_loader)
     print("  Accuracy: {0:.2f}".format(avg_val_accuracy))
-
+    val_accuracy = np.mean(val_accuracy)
+    print('Validation accuracy: ' val_accuracy)
     torch.cuda.empty_cache()
     return
 
