@@ -133,7 +133,9 @@ def Evaluate(model=None):
     avg_val_accuracy = total_eval_accuracy / len(test_data_loader)
     print("  Accuracy: {0:.2f}".format(avg_val_accuracy))
     val_accuracy = np.mean(val_accuracy)
-    print('Validation accuracy: ' val_accuracy)
+    print('Validation accuracy:/n')
+    print(val_accuracy)
+          
     torch.cuda.empty_cache()
     return
 
