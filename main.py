@@ -123,18 +123,20 @@ def Evaluate(model=None):
         test_labels.extend(list(labels.cpu().detach().numpy()))
         #total_eval_accuracy += flat_accuracy(test_preds,test_labels)
         #Calculate accuracy rate
-        accuracy = (test_preds == labels).cpu().numpy().mean() * 100
-        val_accuracy.append(accuracy)
+        #accuracy = (test_preds == labels).cpu().numpy().mean() * 100
+        #val_accuracy.append(accuracy)
         #accuracy = accuracy_score(test_labels,test_preds)
         
     macro_f1 = f1_score(test_labels,test_preds,average='macro')
     print('test macro f1 score:%.4f'%macro_f1)
+    print("Classification report: ")
+    print(classification_report(test_labels, test_preds))
     # Report the final accuracy for this validation run.
     #avg_val_accuracy = total_eval_accuracy / len(test_data_loader)
     #print("  Accuracy: {0:.2f}".format(avg_val_accuracy))
-    val_accuracy = np.mean(val_accuracy)
-    print('Validation accuracy:/n')
-    print(val_accuracy)
+    #val_accuracy = np.mean(val_accuracy)
+    #print('Validation accuracy:/n')
+    #print(val_accuracy)
           
     torch.cuda.empty_cache()
     return
