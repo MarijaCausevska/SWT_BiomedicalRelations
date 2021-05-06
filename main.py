@@ -123,7 +123,7 @@ def Evaluate(model=None):
         test_labels.extend(list(labels.cpu().detach().numpy()))
         #total_eval_accuracy += flat_accuracy(test_preds,test_labels)
         #Calculate accuracy rate
-        accuracy = (test_pred == labels).cpu().numpy().mean() * 100
+        accuracy = (test_preds == labels).cpu().numpy().mean() * 100
         val_accuracy.append(accuracy)
         #accuracy = accuracy_score(test_labels,test_preds)
         
