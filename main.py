@@ -121,12 +121,19 @@ def Evaluate(model=None):
         ids, labels = [t.to(device) for t in data]
         outputs = model(input_ids=ids)
         logits = outputs[0]
-        _, pred = torch.max(logits.data, 1)
-        #loss = loss_fn(outputs,labels) #dodadeno posledno
+        #move logits and labels to CPU
+        logits = logits.detach().cpu().numpy()
+        label_ids = labels.to('cpu').numpy()
+        #Store predictions and tru labels
+        test_preds.append(logits)
+        test_labels.append(label_ids)
+        #_, pred = torch.max(logits.data, 1) -> posledno komentirano
+        #loss = loss_fn(outputs,labels) #
         #correct_predictions += torch.sum(pred == labels)
         #losses.append(loss.item())
-        test_preds.extend(list(pred.cpu().detach().numpy()))
-        test_labels.extend(list(labels.cpu().detach().numpy()))
+        #Ova e Ok
+        #test_preds.extend(list(pred.cpu().detach().numpy()))
+        #test_labels.extend(list(labels.cpu().detach().numpy()))
         #correct_predictions += torch.sum(test_preds == test_labels)
         #total_eval_accuracy += flat_accuracy(test_preds,test_labels)
         #Calculate accuracy rate
@@ -136,10 +143,11 @@ def Evaluate(model=None):
         
     #macro_f1 = f1_score(labels,pred,average='macro')
     #print('test macro f1 score:%.4f'%macro_f1)
+    #print('Positive samples: %d of %d (%.2f%%)' % (df.label.sum(), len(df.label), (df.label.sum() / len(df.label) * 100.0)))
     print("Classification report: ")
     print(classification_report(test_labels, test_preds))
-    print ("Correct predictions: ")
-    print (correct_predictions.double() / len(test_data_loader))
+   #print ("Correct predictions: ")
+    #print (correct_predictions.double() / len(test_data_loader))
     # Report the final accuracy for this validation run.
     #avg_val_accuracy = total_eval_accuracy / len(test_data_loader)
     #print("  Accuracy: {0:.2f}".format(avg_val_accuracy))
