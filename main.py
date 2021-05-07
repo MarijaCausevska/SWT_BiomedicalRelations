@@ -112,18 +112,18 @@ def Evaluate(model=None):
         tokenizer,model = Bert_model(args.task_type,'./model/%s'%args.task_type)
         model = model.to(device)
     test_preds,test_labels = [],[]
-    total_eval_accuracy = 0
-    val_accuracy = []
-    val_loss = []
-    losses = []
+    #total loss for this epoch
+    total_loss = 0
     correct_predictions = 0
     for data in tqdm(test_data_loader):
-        ids, labels = [t.to(device) for t in data]
-        outputs = model(input_ids=ids)
-        logits = outputs[0]
-        _, pred = torch.max(logits.data, 1) 
-        test_preds.extend(list(pred.cpu().detach().numpy()))
-        test_labels.extend(list(labels.cpu().detach().numpy()))
+        #ids, labels = [t.to(device) for t in data]
+        #outputs = model(input_ids=ids)
+        #logits = outputs[0]
+        #_, pred = torch.max(logits.data, 1) 
+        #test_preds.extend(list(pred.cpu().detach().numpy()))
+        #test_labels.extend(list(labels.cpu().detach().numpy()))
+        
+        test_labels += data[]
         #correct_predictions += torch.sum(test_preds == test_labels)
         #total_eval_accuracy += flat_accuracy(test_preds,test_labels)
         #Calculate accuracy rate
