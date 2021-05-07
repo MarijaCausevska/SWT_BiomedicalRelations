@@ -116,21 +116,20 @@ def Evaluate(model=None):
     total_loss = 0
     correct_predictions = 0
     for data in tqdm(test_data_loader):
-        #ids, labels = [t.to(device) for t in data]
-        #outputs = model(input_ids=ids)
-        #logits = outputs[0]
-        #_, pred = torch.max(logits.data, 1) 
-        #test_preds.extend(list(pred.cpu().detach().numpy()))
-        #test_labels.extend(list(labels.cpu().detach().numpy()))
-        
-        test_labels += data[]
+        ids, labels = [t.to(device) for t in data]
+        with torch.no_grad():
+            outputs = model(input_ids=ids)
+            logits = outputs[0]
+            _, pred = torch.max(logits.data, 1) 
+            test_preds.extend(list(pred.cpu().detach().numpy()))
+            test_labels.extend(list(labels.cpu().detach().numpy()))
+            
         #correct_predictions += torch.sum(test_preds == test_labels)
         #total_eval_accuracy += flat_accuracy(test_preds,test_labels)
         #Calculate accuracy rate
         #accuracy = (test_preds == labels).cpu().numpy().mean() * 100
         #val_accuracy.append(accuracy)
-        #accuracy = accuracy_score(test_labels,test_preds)
-        
+        #accuracy = accuracy_score(test_labels,test_preds)    
     #macro_f1 = f1_score(labels,pred,average='macro')
     #print('test macro f1 score:%.4f'%macro_f1)
     #print('Positive samples: %d of %d (%.2f%%)' % (df.label.sum(), len(df.label), (df.label.sum() / len(df.label) * 100.0)))
