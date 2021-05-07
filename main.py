@@ -127,7 +127,7 @@ def Evaluate(model=None):
         #losses.append(loss.item())
         test_preds.extend(list(pred.cpu().detach().numpy()))
         test_labels.extend(list(labels.cpu().detach().numpy()))
-        correct_predictions += torch.sum(test_preds == test_labels)
+        #correct_predictions += torch.sum(test_preds == test_labels)
         #total_eval_accuracy += flat_accuracy(test_preds,test_labels)
         #Calculate accuracy rate
         #accuracy = (test_preds == labels).cpu().numpy().mean() * 100
