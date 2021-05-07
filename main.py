@@ -133,8 +133,8 @@ def Evaluate(model=None):
         #val_accuracy.append(accuracy)
         #accuracy = accuracy_score(test_labels,test_preds)
         
-    macro_f1 = f1_score(labels,pred,average='macro')
-    print('test macro f1 score:%.4f'%macro_f1)
+    #macro_f1 = f1_score(labels,pred,average='macro')
+    #print('test macro f1 score:%.4f'%macro_f1)
     print("Classification report: ")
     print(classification_report(labels, pred))
     print ("Correct predictions: ")
