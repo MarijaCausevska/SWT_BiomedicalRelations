@@ -136,7 +136,7 @@ def Evaluate(model=None):
     #macro_f1 = f1_score(labels,pred,average='macro')
     #print('test macro f1 score:%.4f'%macro_f1)
     print("Classification report: ")
-    print(classification_report(labels, pred))
+    print(classification_report(test_labels, test_preds))
     print ("Correct predictions: ")
     print (correct_predictions.double() / len(test_data_loader))
     # Report the final accuracy for this validation run.
