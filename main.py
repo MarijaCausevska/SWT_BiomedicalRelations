@@ -71,6 +71,7 @@ def flat_accuracy(preds, labels):
     labels_flat = labels.flatten()
     return np.sum(pred_flat == labels_flat) / len(labels_flat)
 
+loss_fn = nn.CrossEntropyLoss().to(device) #dodadeno
 def Train(evalEpochs=None):
     tokenizer,model = Bert_model(args.task_type,'bert-base-cased')#Bert_model(args.task_type,args.bert_path)
     tokenizer.save_pretrained('./models/')#%s/'%args.task_type)
@@ -114,11 +115,16 @@ def Evaluate(model=None):
     total_eval_accuracy = 0
     val_accuracy = []
     val_loss = []
+    losses = []
+    correct_predictions = 0
     for data in tqdm(test_data_loader):
         ids, labels = [t.to(device) for t in data]
         outputs = model(input_ids=ids)
         logits = outputs[0]
         _, pred = torch.max(logits.data, 1)
+        loss = loss_fn(outputs,labels) #dodadeno posledno
+        correct_predictions += torch.sum(pred == labels)
+        losses.append(loss.item())
         test_preds.extend(list(pred.cpu().detach().numpy()))
         test_labels.extend(list(labels.cpu().detach().numpy()))
         #total_eval_accuracy += flat_accuracy(test_preds,test_labels)
@@ -127,10 +133,10 @@ def Evaluate(model=None):
         #val_accuracy.append(accuracy)
         #accuracy = accuracy_score(test_labels,test_preds)
         
-    macro_f1 = f1_score(test_labels,test_preds,average='macro')
+    macro_f1 = f1_score(labels,pred,average='macro')
     print('test macro f1 score:%.4f'%macro_f1)
     print("Classification report: ")
-    print(classification_report(test_labels, test_preds))
+    print(classification_report(labels, pred))
     # Report the final accuracy for this validation run.
     #avg_val_accuracy = total_eval_accuracy / len(test_data_loader)
     #print("  Accuracy: {0:.2f}".format(avg_val_accuracy))
