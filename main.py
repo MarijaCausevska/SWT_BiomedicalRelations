@@ -122,18 +122,18 @@ def Evaluate(model=None):
         outputs = model(input_ids=ids)
         logits = outputs[0]
         #move logits and labels to CPU
-        logits = logits.detach().cpu().numpy()
-        label_ids = labels.to('cpu').numpy()
+        #logits = logits.detach().cpu().numpy()
+        #label_ids = labels.to('cpu').numpy()
         #Store predictions and tru labels
-        test_preds.append(logits)
-        test_labels.append(label_ids)
-        #_, pred = torch.max(logits.data, 1) -> posledno komentirano
+        #test_preds.append(logits)
+        #test_labels.append(label_ids)
+        _, pred = torch.max(logits.data, 1) 
         #loss = loss_fn(outputs,labels) #
         #correct_predictions += torch.sum(pred == labels)
         #losses.append(loss.item())
         #Ova e Ok
-        #test_preds.extend(list(pred.cpu().detach().numpy()))
-        #test_labels.extend(list(labels.cpu().detach().numpy()))
+        test_preds.extend(list(pred.cpu().detach().numpy()))
+        test_labels.extend(list(labels.cpu().detach().numpy()))
         #correct_predictions += torch.sum(test_preds == test_labels)
         #total_eval_accuracy += flat_accuracy(test_preds,test_labels)
         #Calculate accuracy rate
