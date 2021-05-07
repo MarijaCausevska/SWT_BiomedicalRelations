@@ -40,7 +40,7 @@ def Parse_args():
     args.add_argument('--lr', type=float, default=1e-5)
     args.add_argument('--train_bs', type=int, default=128, help='train batch size')
     args.add_argument('--eval_bs', type=int, default=64, help='evaluate batch size')
-    args.add_argument('--epochs', type=int, default=10)
+    args.add_argument('--epochs', type=int, default=1)
     args.add_argument('--cuda', type=int, default=0, help='which gpu be used')
     args = args.parse_args()
     return args
@@ -122,9 +122,9 @@ def Evaluate(model=None):
         outputs = model(input_ids=ids)
         logits = outputs[0]
         _, pred = torch.max(logits.data, 1)
-        loss = loss_fn(outputs,labels) #dodadeno posledno
+        #loss = loss_fn(outputs,labels) #dodadeno posledno
         correct_predictions += torch.sum(pred == labels)
-        losses.append(loss.item())
+        #losses.append(loss.item())
         test_preds.extend(list(pred.cpu().detach().numpy()))
         test_labels.extend(list(labels.cpu().detach().numpy()))
         #total_eval_accuracy += flat_accuracy(test_preds,test_labels)
@@ -137,6 +137,8 @@ def Evaluate(model=None):
     print('test macro f1 score:%.4f'%macro_f1)
     print("Classification report: ")
     print(classification_report(labels, pred))
+    print ("Correct predictions: ")
+    print (correct_predictions.double() / len(test_data_loader))
     # Report the final accuracy for this validation run.
     #avg_val_accuracy = total_eval_accuracy / len(test_data_loader)
     #print("  Accuracy: {0:.2f}".format(avg_val_accuracy))
