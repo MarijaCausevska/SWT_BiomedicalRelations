@@ -40,7 +40,7 @@ def Parse_args():
     args.add_argument('--lr', type=float, default=1e-5)
     args.add_argument('--train_bs', type=int, default=128, help='train batch size')
     args.add_argument('--eval_bs', type=int, default=64, help='evaluate batch size')
-    args.add_argument('--epochs', type=int, default=10)
+    args.add_argument('--epochs', type=int, default=1)
     args.add_argument('--cuda', type=int, default=0, help='which gpu be used')
     args = args.parse_args()
     return args
@@ -109,7 +109,7 @@ def Train(evalEpochs=None):
 
 def Evaluate(model=None):
     if model == None:
-        tokenizer,model = Bert_model('./models/')
+        tokenizer,model = Bert_model(args.task_type,'./models/')
         model = model.to(device)
     test_preds,test_labels = [],[]
     #total loss for this epoch
