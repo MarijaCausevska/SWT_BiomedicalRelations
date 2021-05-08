@@ -113,7 +113,6 @@ def Evaluate(model=None):
         model = model.to(device)
     test_preds,test_labels = [],[]
     #total loss for this epoch
-    
     for data in tqdm(test_data_loader):
         ids, labels = [t.to(device) for t in data]
         with torch.no_grad():
