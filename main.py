@@ -40,7 +40,7 @@ def Parse_args():
     args.add_argument('--lr', type=float, default=1e-5)
     args.add_argument('--train_bs', type=int, default=128, help='train batch size')
     args.add_argument('--eval_bs', type=int, default=64, help='evaluate batch size')
-    args.add_argument('--epochs', type=int, default=1)
+    args.add_argument('--epochs', type=int, default=10)
     args.add_argument('--cuda', type=int, default=0, help='which gpu be used')
     args = args.parse_args()
     return args
@@ -109,30 +109,19 @@ def Train(evalEpochs=None):
 
 def Evaluate(model=None):
     if model == None:
-        tokenizer,model = Bert_model(args.task_type,'./model/%s'%args.task_type)
+        tokenizer,model = Bert_model('./models/')
         model = model.to(device)
     test_preds,test_labels = [],[]
     #total loss for this epoch
-    total_loss = 0
-    total_accuracy = 0
-    total_preds =[]
+    
     for data in tqdm(test_data_loader):
-        #ids, labels = [t.to(device) for t in data]
-        data = [t.to(device) for t in data]
-        ids, labels = data
+        ids, labels = [t.to(device) for t in data]
         with torch.no_grad():
-            #outputs = model(input_ids=ids)
-            preds = model(input_ids=ids)
-            #loss = nn.CrossEntropyLoss()
-            #output = loss(preds, labels)
-            #output.backward()
-            #total_loss = total_loss + output.item()
-            preds = preds.detach().cpu().numpy()
-            total_preds.append(preds)
-            #logits = outputs[0]
-            #_, pred = torch.max(logits.data, 1) 
-            #test_preds.extend(list(pred.cpu().detach().numpy()))
-            #test_labels.extend(list(labels.cpu().detach().numpy()))
+            outputs = model(input_ids=ids)
+            logits = outputs[0]
+            _, pred = torch.max(logits.data, 1) 
+            test_preds.extend(list(pred.cpu().detach().numpy()))
+            test_labels.extend(list(labels.cpu().detach().numpy()))
             
         #correct_predictions += torch.sum(test_preds == test_labels)
         #total_eval_accuracy += flat_accuracy(test_preds,test_labels)
@@ -141,21 +130,13 @@ def Evaluate(model=None):
         #val_accuracy.append(accuracy)
         #accuracy = accuracy_score(test_labels,test_preds) 
         
-    #macro_f1 = f1_score(labels,pred,average='macro')
-    #print('test macro f1 score:%.4f'%macro_f1)
+    macro_f1 = f1_score(labels,pred,average='macro')
+    print('test macro f1 score:%.4f'%macro_f1)
     #print('Positive samples: %d of %d (%.2f%%)' % (df.label.sum(), len(df.label), (df.label.sum() / len(df.label) * 100.0)))
-    #print("Classification report: ")
-    #print(classification_report(test_labels, test_preds))
+    print("Classification report: ")
+    print(classification_report(test_labels, test_preds))
     #avg_loss = total_loss / len(test_data_loader)
-    total_preds = np.concatenate(total_preds, axis=0)
-    macro_f1 = f1_score(labels,total_preds,average='macro')
-    #print("Average loss: ")
-    #print(avg_loss)
-    print("total predictions: \n")
-    print(total_preds)
-    print("Macro f1 score: ")
-    print(macro_f1)    
-   #print ("Correct predictions: ")
+    #print ("Correct predictions: ")
     #print (correct_predictions.double() / len(test_data_loader))
     # Report the final accuracy for this validation run.
     #avg_val_accuracy = total_eval_accuracy / len(test_data_loader)
