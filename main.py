@@ -27,7 +27,7 @@ conf = Conf()
 def Parse_args():
     args = argparse.ArgumentParser()
     args.add_argument('--task_type',
-                      default='chemical-disease', help='task type:chemical-disease,chemical-gene,gene-disease')
+                      default='gene-disease', help='task type:chemical-disease,chemical-gene,gene-disease')
     args.add_argument('--confidence_limit', type=float,
                       default=-1.0, help='dependency path lower confidence limit, use suggestion value if it equal -1.0. \
                       suggestion value:0.9 for chemical-disease; 0.5 for chemical-gene; 0.6 for gene-disease; 0.9 for gene-gene')
@@ -40,7 +40,7 @@ def Parse_args():
     args.add_argument('--lr', type=float, default=1e-5)
     args.add_argument('--train_bs', type=int, default=128, help='train batch size')
     args.add_argument('--eval_bs', type=int, default=64, help='evaluate batch size')
-    args.add_argument('--epochs', type=int, default=1)
+    args.add_argument('--epochs', type=int, default=10)
     args.add_argument('--cuda', type=int, default=0, help='which gpu be used')
     args = args.parse_args()
     return args
