@@ -27,7 +27,7 @@ conf = Conf()
 def Parse_args():
     args = argparse.ArgumentParser()
     args.add_argument('--task_type',
-                      default='gene-disease', help='task type:chemical-disease,chemical-gene,gene-disease')
+                      default='gene-gene', help='task type:chemical-disease,chemical-gene,gene-disease')
     args.add_argument('--confidence_limit', type=float,
                       default=-1.0, help='dependency path lower confidence limit, use suggestion value if it equal -1.0. \
                       suggestion value:0.9 for chemical-disease; 0.5 for chemical-gene; 0.6 for gene-disease; 0.9 for gene-gene')
@@ -40,7 +40,7 @@ def Parse_args():
     args.add_argument('--lr', type=float, default=1e-5)
     args.add_argument('--train_bs', type=int, default=128, help='train batch size')
     args.add_argument('--eval_bs', type=int, default=64, help='evaluate batch size')
-    args.add_argument('--epochs', type=int, default=10)
+    args.add_argument('--epochs', type=int, default=1)
     args.add_argument('--cuda', type=int, default=0, help='which gpu be used')
     args = args.parse_args()
     return args
@@ -74,7 +74,7 @@ def flat_accuracy(preds, labels):
 loss_fn = nn.CrossEntropyLoss().to(device) #dodadeno
 def Train(evalEpochs=None):
     tokenizer,model = Bert_model(args.task_type,'bert-base-cased')#Bert_model(args.task_type,args.bert_path)
-    tokenizer.save_pretrained('./models/')#%s/'%args.task_type)
+    tokenizer.save_pretrained('./models/%s'%args.task_type)
     model = model.to(device)
     model_params = [p for p in model.parameters() if p.requires_grad]
     optimizer = torch.optim.Adam(model_params, lr=args.lr)
@@ -102,14 +102,14 @@ def Train(evalEpochs=None):
                 torch.cuda.empty_cache()
                 Evaluate(model)
     model_to_save = model.module if hasattr(model, 'module') else model  # Take care of distributed/parallel training
-    model_to_save.save_pretrained('./models/')#%s/'%args.task_type)
+    model_to_save.save_pretrained('./models/%s'%args.task_type)
     #torch.save(model_to_save.state_dict(),'./models/%s/'%args.task_type)
     torch.cuda.empty_cache()
     return
 
 def Evaluate(model=None):
     if model == None:
-        tokenizer,model = Bert_model(args.task_type,'bert-base-cased')
+        tokenizer,model = Bert_model(args.task_type,'./models/%s'%args.task_type)#'bert-base-cased')
         model = model.to(device)
     test_preds,test_labels = [],[]
     #total loss for this epoch
