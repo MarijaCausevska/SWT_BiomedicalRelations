@@ -40,7 +40,7 @@ def Parse_args():
     args.add_argument('--lr', type=float, default=1e-5)
     args.add_argument('--train_bs', type=int, default=128, help='train batch size')
     args.add_argument('--eval_bs', type=int, default=64, help='evaluate batch size')
-    args.add_argument('--epochs', type=int, default=10)
+    args.add_argument('--epochs', type=int, default=1)
     args.add_argument('--cuda', type=int, default=0, help='which gpu be used')
     args = args.parse_args()
     return args
@@ -113,14 +113,15 @@ def Evaluate(model=None):
         model = model.to(device)
     test_preds,test_labels = [],[]
     #total loss for this epoch
-    for data in tqdm(test_data_loader):
-        ids, labels = [t.to(device) for t in data]
+    with torch.no_grad():
+        for data in tqdm(test_data_loader):
+            ids, labels = [t.to(device) for t in data]
         
-        outputs = model(input_ids=ids)
-        logits = outputs[0]
-        _, pred = torch.max(logits.data, 1) 
-        test_preds.extend(list(pred.cpu().detach().numpy()))
-        test_labels.extend(list(labels.cpu().detach().numpy()))
+            outputs = model(input_ids=ids)
+            logits = outputs[0]
+            _, pred = torch.max(logits.data, 1) 
+            test_preds.extend(list(pred.cpu().detach().numpy()))
+            test_labels.extend(list(labels.cpu().detach().numpy()))
             
         #correct_predictions += torch.sum(test_preds == test_labels)
         #total_eval_accuracy += flat_accuracy(test_preds,test_labels)
