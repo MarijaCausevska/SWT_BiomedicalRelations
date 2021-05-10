@@ -65,7 +65,7 @@ class Prepare_Data(Conf):
         ids = sequence.pad_sequences(ids,self.max_seq_len, truncating='post', padding='post')
 
         # split data to train and test
-        X_train, X_test, y_train, y_test = train_test_split(ids,sentence_df['label'].values, test_size=0.3, stratify=sentence_df['label'].values, random_state=42)
+        X_train, X_test, y_train, y_test = train_test_split(ids,sentence_df['label'].values, test_size=0.2, stratify=sentence_df['label'].values, random_state=42)
         train_data_loader = Data_loader(torch.LongTensor(X_train),torch.LongTensor(y_train),bs=trainBS)
         test_data_loader = Data_loader(torch.LongTensor(X_test),torch.LongTensor(y_test),bs=evalBS)
         return train_data_loader,test_data_loader
