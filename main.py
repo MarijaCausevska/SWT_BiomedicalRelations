@@ -135,8 +135,8 @@ def Evaluate(model=None):
     #print('Positive samples: %d of %d (%.2f%%)' % (df.label.sum(), len(df.label), (df.label.sum() / len(df.label) * 100.0)))
     print("Classification report: ")
     print(classification_report(test_labels, test_preds))
-    #print("Accuracy score: ")
-    #print(accuracy_score(test_labels, test_preds))
+    print("Accuracy score: ")
+    print(accuracy_score(test_labels, test_preds))
 
     #avg_loss = total_loss / len(test_data_loader)
     #print ("Correct predictions: ")
