@@ -27,7 +27,7 @@ conf = Conf()
 def Parse_args():
     args = argparse.ArgumentParser()
     args.add_argument('--task_type',
-                      default='gene-gene', help='task type:chemical-disease,chemical-gene,gene-disease')
+                      default='chemical-disease', help='task type:chemical-disease,chemical-gene,gene-disease')
     args.add_argument('--confidence_limit', type=float,
                       default=-1.0, help='dependency path lower confidence limit, use suggestion value if it equal -1.0. \
                       suggestion value:0.9 for chemical-disease; 0.5 for chemical-gene; 0.6 for gene-disease; 0.9 for gene-gene')
@@ -109,7 +109,7 @@ def Train(evalEpochs=None):
 
 def Evaluate(model=None):
     if model == None:
-        tokenizer,model = Bert_model(args.task_type,'./modelssec/%s'%args.task_type)#'bert-base-cased')
+        tokenizer,model = Bert_model(args.task_type,'./models/%s'%args.task_type)#'bert-base-cased')
         model = model.to(device)
     test_preds,test_labels = [],[]
     #total loss for this epoch
@@ -216,6 +216,6 @@ def Evaluate(model=None):
   # torch.cuda.empty_cache()
   #  return
 
-#Train()#evalEpochs=1)
+Train(evalEpochs=5)
 Evaluate()
 #Predict()
