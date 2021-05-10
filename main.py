@@ -113,15 +113,15 @@ def Evaluate(model=None):
         model = model.to(device)
     test_preds,test_labels = [],[]
     #total loss for this epoch
-    with torch.no_grad():
-        for data in tqdm(test_data_loader):
-            ids, labels = [t.to(device) for t in data]
+    
+    for data in tqdm(test_data_loader):
+        ids, labels = [t.to(device) for t in data]
         
-            outputs = model(input_ids=ids)
-            logits = outputs[0]
-            _, pred = torch.max(logits.data, 1) 
-            test_preds.extend(list(pred.cpu().detach().numpy()))
-            test_labels.extend(list(labels.cpu().detach().numpy()))
+        outputs = model(input_ids=ids)
+        logits = outputs[0]
+        _, pred = torch.max(logits.data, 1) 
+        test_preds.extend(list(pred.cpu().detach().numpy()))
+        test_labels.extend(list(labels.cpu().detach().numpy()))
             
         #correct_predictions += torch.sum(test_preds == test_labels)
         #total_eval_accuracy += flat_accuracy(test_preds,test_labels)
