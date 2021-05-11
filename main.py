@@ -109,7 +109,7 @@ def Train(evalEpochs=None):
 
 def Evaluate(model=None):
     if model == None:
-        tokenizer,model = Bert_model(args.task_type,'./models/%s'%args.task_type)#'bert-base-cased')
+        tokenizer,model = Bert_model(args.task_type,'./modelssec/%s'%args.task_type)#'bert-base-cased')
         model = model.to(device)
     test_preds,test_labels = [],[]
     #total loss for this epoch
